@@ -7,6 +7,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myrecyclerviewapplication.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -24,16 +25,15 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onCityLongClick(view: View, position: Int) {
-                    Singleton.cities.removeAt(position)
-                    binding.
-                    mainRecyclerView.
-                    adapter?.notifyItemRemoved(position)
+                    val removedCity = Singleton.cities.removeAt(position)
+                    binding.mainRecyclerView.adapter?.notifyItemRemoved(position)
+                    showUndoSnackbar(removedCity)
                 }
             })
 
         for (i in 0..10){
             Singleton.cities.add(
-                City("City $i",i)
+                City(i, "City $i",i)
             )
         }
         binding.mainRecyclerView.layoutManager =
@@ -46,6 +46,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    private fun showUndoSnackbar(removedCity: City) {
+        Snackbar.make(
+            binding.root,
+            "Cidade ${removedCity.name} removida",
+            Snackbar.LENGTH_LONG
+        ).setAction("Desfazer") {
+            Singleton.cities.add(removedCity)
+            binding.mainRecyclerView.adapter?.notifyDataSetChanged()
+        }.show()
+    }
+
 
     override fun onResume() {
         super.onResume()

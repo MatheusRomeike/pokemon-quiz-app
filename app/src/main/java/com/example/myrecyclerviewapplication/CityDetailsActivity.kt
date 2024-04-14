@@ -2,8 +2,11 @@ package com.example.myrecyclerviewapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.example.myrecyclerviewapplication.databinding.ActivityCityDetailsBinding
+import com.google.android.material.snackbar.Snackbar
 
 class CityDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +29,7 @@ class CityDetailsActivity : AppCompatActivity() {
                 .toString().toInt()
             val isCapital = binding.capitalCheckBox.isChecked
             if (Singleton.citySelected < 0) {
-                Singleton.cities.add(City(name, population, isCapital))
+                Singleton.cities.add(City(Singleton.citySelected, name, population, isCapital))
             }else{
                 Singleton.cities[Singleton.citySelected].apply{
                     this.name = name
@@ -37,4 +40,22 @@ class CityDetailsActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    override fun onBackPressed() {
+        showDiscardChangesDialog()
+    }
+
+    private fun showDiscardChangesDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Descartar Alterações?")
+            .setMessage("Tem certeza de que deseja voltar sem salvar as alterações?")
+            .setPositiveButton("Sim") { _, _ ->
+                super.onBackPressed()
+            }
+            .setNegativeButton("Não", null)
+            .create()
+            .show()
+    }
+
+
 }
