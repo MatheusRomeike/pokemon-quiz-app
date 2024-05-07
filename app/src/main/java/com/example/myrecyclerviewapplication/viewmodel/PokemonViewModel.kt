@@ -27,4 +27,9 @@ class PokemonViewModel @Inject constructor(private val pokemonRepository: Pokemo
         pokemonsLiveData.value = pokemonRepository.pokemons
         pokemonLiveData.value = pokemonRepository.pokemon
     }
+
+    fun getAll(){
+        pokemonRepository.getAll()
+        pokemonsLiveData.value = pokemonRepository.pokemons
+    }
 }

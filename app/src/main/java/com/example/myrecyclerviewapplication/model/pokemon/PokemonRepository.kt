@@ -14,4 +14,8 @@ class PokemonRepository @Inject constructor(var dao: PokemonDao) {
     fun getById(id: Int){
         pokemon = dao.getById(id)
     }
+
+    fun getAll(){
+        pokemons = dao.getAll()
+    }
 }

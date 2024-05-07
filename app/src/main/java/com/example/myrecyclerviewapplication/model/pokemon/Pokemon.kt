@@ -13,5 +13,9 @@ data class Pokemon(
     val isDefault: Boolean,
     val order: Int,
     val weight: Int,
-    val locationAreaEncounters: String
+    val locationAreaEncounters: String,
+    val color: String,
+    val type: String
 )
+
+

@@ -1,5 +1,6 @@
 package com.example.myrecyclerviewapplication.controller
 
+import android.content.Intent
 import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
 import android.os.Bundle
 import android.widget.Toast
@@ -74,10 +75,11 @@ class LoginRegisterActivity : AppCompatActivity() {
         viewModel.getUserByNameAndPassword(binding.userEditText.text.toString(), binding.passwordEditText.text.toString())
         if (viewModel.userData.value != null) {
             Toast.makeText(this, "Login com sucesso.", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, PokemonActivity::class.java))
+            finish() // Finaliza esta atividade para que o usuário não possa voltar para a tela de login com o botão de voltar
         } else {
             Toast.makeText(this, "Erro ao entrar: Usuário/Senha inválidos.", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     override fun onResume() {
