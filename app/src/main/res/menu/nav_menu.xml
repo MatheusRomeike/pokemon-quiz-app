@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_pokedex"
+        android:title="Pokedex"
+        android:icon="@android:drawable/ic_menu_upload" />
+
+    <item
+        android:id="@+id/action_fusao"
+        android:title="Fusão"
+        android:icon="@android:drawable/ic_menu_rotate" />
+
+    <item
+        android:id="@+id/action_sair"
+        android:title="Sair"
+        android:icon="@android:drawable/ic_dialog_alert" />
+</menu>

@@ -7,7 +7,7 @@ class PokemonRepository @Inject constructor(var dao: PokemonDao) {
     public var pokemon: Pokemon? = null
 
     fun insert(pokemon: List<Pokemon>){
-        dao.insert(pokemons)
+        dao.insert(pokemon)
         pokemons = dao.getAll()
     }
 

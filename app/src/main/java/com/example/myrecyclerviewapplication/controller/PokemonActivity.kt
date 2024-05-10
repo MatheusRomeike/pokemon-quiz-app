@@ -1,6 +1,7 @@
 package com.example.myrecyclerviewapplication.controller
 
 import PokemonAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -14,6 +15,7 @@ import com.example.myrecyclerviewapplication.model.pokemon.PokemonRepository
 import com.example.myrecyclerviewapplication.databinding.PokemonActivityBinding
 import com.example.myrecyclerviewapplication.viewmodel.PokemonViewModel
 import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -39,17 +41,41 @@ class PokemonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pokemon_activity)
 
-        pokemonAdapter = PokemonAdapter(emptyList()) {  }
+        pokemonAdapter = PokemonAdapter(emptyList()) { }
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+
         recyclerView.apply {
             adapter = pokemonAdapter
             layoutManager = GridLayoutManager(this@PokemonActivity, 2)
         }
 
-        fetchPokemonList()
         loadPokemonList()
+        viewModel.getAll()
+        if (viewModel.pokemonsLiveData.value.isNullOrEmpty()) {
+            fetchPokemonList()
+        }
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.action_fusao -> {
+                    startActivity(Intent(this, FusaoActivity::class.java))
+                    true
+                }
+
+                R.id.action_sair -> {
+                    startActivity(Intent(this, LoginRegisterActivity::class.java))
+                    true
+                }
+
+                else -> {
+                    false
+                }
+            }
+        }
     }
+
 
     private fun fetchPokemonList() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -143,6 +169,7 @@ class PokemonActivity : AppCompatActivity() {
                 }
 
                 viewModel.pokemonsLiveData.postValue(pokemonListToInsert)
+                pokemonRepository.insert(pokemonListToInsert)
 
             } catch (e: Exception) {
                 Log.e("PokemonActivity", "Error fetching Pokemon: ${e.message}")
