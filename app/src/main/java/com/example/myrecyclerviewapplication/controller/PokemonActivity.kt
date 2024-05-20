@@ -87,7 +87,7 @@ class PokemonActivity : AppCompatActivity() {
     private fun fetchPokemonList() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=100")
+                val url = URL("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=151")
                 val urlConnection = url.openConnection() as HttpURLConnection
                 urlConnection.requestMethod = "GET"
                 val inputStream = urlConnection.inputStream
