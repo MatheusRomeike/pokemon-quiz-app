@@ -13,7 +13,7 @@ data class Pokemon(
     val isDefault: Boolean,
     val order: Int,
     val weight: Int,
-    val locationAreaEncounters: String,
+    val urlImage: String,
     val color: String,
     val type: String
 )

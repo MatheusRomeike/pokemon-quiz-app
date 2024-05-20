@@ -6,8 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myrecyclerviewapplication.R
 import com.example.myrecyclerviewapplication.model.pokemon.Pokemon
 
-class PokemonAdapter(private var pokemonList: List<Pokemon>, private val listener: (Int) -> Unit) :
+class PokemonAdapter(private var pokemonList: List<Pokemon>, val clickListener: OnPokemonClickListener) :
     RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
+
+    interface OnPokemonClickListener{
+        fun onPokemonClick(view:View,position: Int)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon, parent, false)
@@ -48,7 +52,9 @@ class PokemonAdapter(private var pokemonList: List<Pokemon>, private val listene
         fun bind(pokemon: Pokemon) {
             textViewName.text = "${pokemon.name}"
             textViewType.text = "${pokemon.type}"
-
+            itemView.setOnClickListener{
+                clickListener.onPokemonClick(it, pokemon.id)
+            }
         }
     }
 

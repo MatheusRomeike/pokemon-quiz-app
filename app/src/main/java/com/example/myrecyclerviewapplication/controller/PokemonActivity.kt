@@ -4,6 +4,7 @@ import PokemonAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -41,7 +42,13 @@ class PokemonActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pokemon_activity)
 
-        pokemonAdapter = PokemonAdapter(emptyList()) { }
+        pokemonAdapter = PokemonAdapter(emptyList(), object : PokemonAdapter.OnPokemonClickListener {
+            override fun onPokemonClick(view: View, position: Int) {
+                val intent = Intent(this@PokemonActivity,PokemonDetailsActivity::class.java)
+                intent.putExtra("pokemonPosition", position)
+                startActivity(intent)
+            }
+        })
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
@@ -116,7 +123,15 @@ class PokemonActivity : AppCompatActivity() {
                     val isDefault = pokemonDetailsObject.getBoolean("is_default")
                     val order = pokemonDetailsObject.getInt("order")
                     val weight = pokemonDetailsObject.getInt("weight")
-                    val locationAreaEncounters = pokemonDetailsObject.getString("location_area_encounters")
+
+                    var urlImage = ""
+                    if (pokemonDetailsObject.has("sprites")) {
+                        val spritesObject = pokemonDetailsObject.getJSONObject("sprites")
+
+                        urlImage = spritesObject.getString("front_default")
+                    }
+
+
 
                     var typeName = ""
                     if (pokemonDetailsObject.has("types")) {
@@ -161,7 +176,7 @@ class PokemonActivity : AppCompatActivity() {
                             isDefault = isDefault,
                             order = order,
                             weight = weight,
-                            locationAreaEncounters = locationAreaEncounters,
+                            urlImage = urlImage,
                             color = color,
                             type = typeName
                         )
