@@ -2,6 +2,7 @@ package com.example.myrecyclerviewapplication.controller
 
 import PokemonAdapter
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -38,6 +39,16 @@ class PokemonActivity : AppCompatActivity() {
 
     private lateinit var pokemonAdapter: PokemonAdapter
 
+    inner class MarginBottomItemDecoration(private val bottomSpaceHeight: Int) : RecyclerView.ItemDecoration() {
+
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            // Verifica se é o último item
+            if (parent.getChildAdapterPosition(view) == parent.adapter?.itemCount?.minus(1)) {
+                outRect.bottom = bottomSpaceHeight
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pokemon_activity)
@@ -55,6 +66,7 @@ class PokemonActivity : AppCompatActivity() {
         recyclerView.apply {
             adapter = pokemonAdapter
             layoutManager = GridLayoutManager(this@PokemonActivity, 2)
+            addItemDecoration(MarginBottomItemDecoration(200))
         }
 
         loadPokemonList()
