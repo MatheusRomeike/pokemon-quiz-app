@@ -38,7 +38,7 @@ class FusaoActivity : AppCompatActivity() {
 
         viewModel.pokemonsLiveData.observe(this) { pokemonList ->
             val pokemonNames = pokemonList
-                .filter { it.id <= 131 }
+                .filter { it.id <= 151 }
                 .map { it.name }
 
             val adapter = ArrayAdapter(

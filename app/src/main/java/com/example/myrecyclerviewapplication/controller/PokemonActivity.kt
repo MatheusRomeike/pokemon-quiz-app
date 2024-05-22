@@ -2,8 +2,10 @@ package com.example.myrecyclerviewapplication.controller
 
 import PokemonAdapter
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -37,17 +39,34 @@ class PokemonActivity : AppCompatActivity() {
 
     private lateinit var pokemonAdapter: PokemonAdapter
 
+    inner class MarginBottomItemDecoration(private val bottomSpaceHeight: Int) : RecyclerView.ItemDecoration() {
+
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            // Verifica se é o último item
+            if (parent.getChildAdapterPosition(view) == parent.adapter?.itemCount?.minus(1)) {
+                outRect.bottom = bottomSpaceHeight
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pokemon_activity)
 
-        pokemonAdapter = PokemonAdapter(emptyList()) { }
+        pokemonAdapter = PokemonAdapter(emptyList(), object : PokemonAdapter.OnPokemonClickListener {
+            override fun onPokemonClick(view: View, position: Int) {
+                val intent = Intent(this@PokemonActivity,PokemonDetailsActivity::class.java)
+                intent.putExtra("pokemonPosition", position)
+                startActivity(intent)
+            }
+        })
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
         recyclerView.apply {
             adapter = pokemonAdapter
             layoutManager = GridLayoutManager(this@PokemonActivity, 2)
+            addItemDecoration(MarginBottomItemDecoration(200))
         }
 
         loadPokemonList()
@@ -80,7 +99,7 @@ class PokemonActivity : AppCompatActivity() {
     private fun fetchPokemonList() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val url = URL("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=100")
+                val url = URL("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=151")
                 val urlConnection = url.openConnection() as HttpURLConnection
                 urlConnection.requestMethod = "GET"
                 val inputStream = urlConnection.inputStream
@@ -116,7 +135,15 @@ class PokemonActivity : AppCompatActivity() {
                     val isDefault = pokemonDetailsObject.getBoolean("is_default")
                     val order = pokemonDetailsObject.getInt("order")
                     val weight = pokemonDetailsObject.getInt("weight")
-                    val locationAreaEncounters = pokemonDetailsObject.getString("location_area_encounters")
+
+                    var urlImage = ""
+                    if (pokemonDetailsObject.has("sprites")) {
+                        val spritesObject = pokemonDetailsObject.getJSONObject("sprites")
+
+                        urlImage = spritesObject.getString("front_default")
+                    }
+
+
 
                     var typeName = ""
                     if (pokemonDetailsObject.has("types")) {
@@ -161,7 +188,7 @@ class PokemonActivity : AppCompatActivity() {
                             isDefault = isDefault,
                             order = order,
                             weight = weight,
-                            locationAreaEncounters = locationAreaEncounters,
+                            urlImage = urlImage,
                             color = color,
                             type = typeName
                         )

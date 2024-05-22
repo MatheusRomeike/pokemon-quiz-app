@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My RecyclerView Application</string>
+    <string name="app_name">Pokedex</string>
     <string name="add_new_city">Add New City</string>
     <string name="city_name">City Name</string>
     <string name="population_size">Population Size</string>
