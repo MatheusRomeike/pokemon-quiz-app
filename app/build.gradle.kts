@@ -41,10 +41,22 @@ android {
     buildFeatures{
         dataBinding = true
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 }
 
 dependencies {
+
+    implementation ("androidx.compose.ui:ui:1.6.7")
+    implementation ("androidx.compose.material:material:1.6.7")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.6.7")
+    implementation ("androidx.activity:activity-compose:1.7.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation ("androidx.compose.runtime:runtime-livedata:1.4.3")
+
     val hiltVersion = "2.50"
 
     implementation("com.google.dagger:hilt-android:$hiltVersion")

@@ -87,7 +87,7 @@ class FusaoActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_pokedex -> {
-                    startActivity(Intent(this, PokemonActivity::class.java))
+                    startActivity(Intent(this, HomeActivity::class.java))
                     true
                 }
 

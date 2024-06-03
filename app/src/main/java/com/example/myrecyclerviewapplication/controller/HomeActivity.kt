@@ -6,23 +6,23 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myrecyclerviewapplication.R
+import com.example.myrecyclerviewapplication.compose.HomeScreen
+import com.example.myrecyclerviewapplication.compose.LoginRegisterScreen
 import com.example.myrecyclerviewapplication.model.pokemon.Pokemon
-import com.example.myrecyclerviewapplication.model.pokemon.PokemonDao
 import com.example.myrecyclerviewapplication.model.pokemon.PokemonRepository
-import com.example.myrecyclerviewapplication.databinding.PokemonActivityBinding
 import com.example.myrecyclerviewapplication.viewmodel.PokemonViewModel
-import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -32,66 +32,28 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class PokemonActivity : AppCompatActivity() {
+class HomeActivity : ComponentActivity() {
 
     val viewModel: PokemonViewModel by viewModels()
     @Inject lateinit var pokemonRepository: PokemonRepository
 
-    private lateinit var pokemonAdapter: PokemonAdapter
-
-    inner class MarginBottomItemDecoration(private val bottomSpaceHeight: Int) : RecyclerView.ItemDecoration() {
-
-        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-            // Verifica se é o último item
-            if (parent.getChildAdapterPosition(view) == parent.adapter?.itemCount?.minus(1)) {
-                outRect.bottom = bottomSpaceHeight
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.pokemon_activity)
-
-        pokemonAdapter = PokemonAdapter(emptyList(), object : PokemonAdapter.OnPokemonClickListener {
-            override fun onPokemonClick(view: View, position: Int) {
-                val intent = Intent(this@PokemonActivity,PokemonDetailsActivity::class.java)
-                intent.putExtra("pokemonPosition", position)
-                startActivity(intent)
-            }
-        })
-
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-
-        recyclerView.apply {
-            adapter = pokemonAdapter
-            layoutManager = GridLayoutManager(this@PokemonActivity, 2)
-            addItemDecoration(MarginBottomItemDecoration(200))
+        setContent {
+            HomeScreen(
+                onQuizClicked = {
+                    // Implemente o código para ir para o quiz aqui
+                },
+                onScoreboardClicked = {
+                    // Implemente o código para ir para o placar aqui
+                }
+            )
         }
 
         loadPokemonList()
         viewModel.getAll()
         if (viewModel.pokemonsLiveData.value.isNullOrEmpty()) {
             fetchPokemonList()
-        }
-
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_fusao -> {
-                    startActivity(Intent(this, FusaoActivity::class.java))
-                    true
-                }
-
-                R.id.action_sair -> {
-                    startActivity(Intent(this, LoginRegisterActivity::class.java))
-                    true
-                }
-
-                else -> {
-                    false
-                }
-            }
         }
     }
 
@@ -175,7 +137,7 @@ class PokemonActivity : AppCompatActivity() {
                         color = colorObject.getString("name")
 
                     } catch (e: Exception) {
-                        Log.e("PokemonActivity", "Error fetching Pokemon color: ${e.message}")
+                        Log.e("HomeActivity", "Error fetching Pokemon color: ${e.message}")
                     }
 
 
@@ -199,7 +161,7 @@ class PokemonActivity : AppCompatActivity() {
                 pokemonRepository.insert(pokemonListToInsert)
 
             } catch (e: Exception) {
-                Log.e("PokemonActivity", "Error fetching Pokemon: ${e.message}")
+                Log.e("HomeActivity", "Error fetching Pokemon: ${e.message}")
             }
         }
     }
@@ -209,14 +171,9 @@ class PokemonActivity : AppCompatActivity() {
 
         try {
             viewModel.getAll()
-            viewModel.pokemonsLiveData.observe(this, { pokemonList ->
-                runOnUiThread {
-                    pokemonAdapter.updateList(pokemonList)
-                }
-            })
         }
         catch (e: Exception){
-            Log.e("PokemonActivity", "Error loading pokemons: ${e.message}")
+            Log.e("HomeActivity", "Error loading pokemons: ${e.message}")
 
         }
 

@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.PokemonActivity"
+            android:name=".controller.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

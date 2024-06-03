@@ -7,9 +7,9 @@ import com.example.myrecyclerviewapplication.model.pokemon.PokemonRepository
 import com.example.myrecyclerviewapplication.model.user.UserDao
 import com.example.myrecyclerviewapplication.model.user.UserDatabase
 import com.example.myrecyclerviewapplication.model.user.UserRepository
-import com.example.myrecyclerviewapplication.model.user_pokemon.UserPokemonDao
-import com.example.myrecyclerviewapplication.model.user_pokemon.UserPokemonDatabase
-import com.example.myrecyclerviewapplication.model.user_pokemon.UserPokemonRepository
+import com.example.myrecyclerviewapplication.model.user_score.UserScoreDao
+import com.example.myrecyclerviewapplication.model.user_score.UserScoreDatabase
+import com.example.myrecyclerviewapplication.model.user_score.UserScoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,8 +42,8 @@ class AppModule {
     // Provisão do banco de dados para User-Pokemon
     @Singleton
     @Provides
-    fun provideUserPokemonDatabase(@ApplicationContext app: Context): UserPokemonDatabase {
-        return Room.databaseBuilder(app, UserPokemonDatabase::class.java, "user_pokemon.sqlite")
+    fun provideUserPokemonDatabase(@ApplicationContext app: Context): UserScoreDatabase {
+        return Room.databaseBuilder(app, UserScoreDatabase::class.java, "user_pokemon.sqlite")
             .allowMainThreadQueries()
             .build()
     }
@@ -61,8 +61,8 @@ class AppModule {
     // Provisão do DAO para User-Pokemon
     @Singleton
     @Provides
-    fun provideUserPokemonDao(userPokemonDatabase: UserPokemonDatabase) =
-        userPokemonDatabase.userPokemonDao()
+    fun provideUserScoreDao(UserScoreDatabase: UserScoreDatabase) =
+        UserScoreDatabase.userScoreDao()
 
     // Provisão do repositório para usuários
     @Singleton
@@ -77,6 +77,6 @@ class AppModule {
     // Provisão do repositório para User-Pokemon
     @Singleton
     @Provides
-    fun provideUserPokemonRepository(userPokemonDao: UserPokemonDao) =
-        UserPokemonRepository(userPokemonDao)
+    fun provideUserScoreRepository(userScoreDao: UserScoreDao) =
+        UserScoreRepository(userScoreDao)
 }
