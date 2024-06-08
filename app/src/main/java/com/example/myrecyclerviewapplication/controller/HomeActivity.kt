@@ -1,24 +1,15 @@
 package com.example.myrecyclerviewapplication.controller
 
-import PokemonAdapter
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.myrecyclerviewapplication.R
 import com.example.myrecyclerviewapplication.compose.HomeScreen
-import com.example.myrecyclerviewapplication.compose.LoginRegisterScreen
 import com.example.myrecyclerviewapplication.model.pokemon.Pokemon
 import com.example.myrecyclerviewapplication.model.pokemon.PokemonRepository
 import com.example.myrecyclerviewapplication.viewmodel.PokemonViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,24 +19,25 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.*
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
 
-    val viewModel: PokemonViewModel by viewModels()
-    @Inject lateinit var pokemonRepository: PokemonRepository
+    private val viewModel: PokemonViewModel by viewModels()
+    @Inject
+    lateinit var pokemonRepository: PokemonRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HomeScreen(
                 onQuizClicked = {
-                    // Implemente o código para ir para o quiz aqui
+                    startActivity(Intent(this, QuizActivity::class.java))
                 },
                 onScoreboardClicked = {
-                    // Implemente o código para ir para o placar aqui
+                    startActivity(Intent(this, LeaderBoardActivity::class.java))
                 }
             )
         }
@@ -56,7 +48,6 @@ class HomeActivity : ComponentActivity() {
             fetchPokemonList()
         }
     }
-
 
     private fun fetchPokemonList() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -81,11 +72,9 @@ class HomeActivity : ComponentActivity() {
 
                 val pokemonListToInsert = mutableListOf<Pokemon>()
 
-
                 for (i in 0 until jsonArray.length()) {
                     val pokemonObject = jsonArray.getJSONObject(i)
                     val name = pokemonObject.getString("name")
-
                     val pokemonUrl = pokemonObject.getString("url")
 
                     val pokemonDetailsJson = URL(pokemonUrl).readText()
@@ -101,22 +90,16 @@ class HomeActivity : ComponentActivity() {
                     var urlImage = ""
                     if (pokemonDetailsObject.has("sprites")) {
                         val spritesObject = pokemonDetailsObject.getJSONObject("sprites")
-
                         urlImage = spritesObject.getString("front_default")
                     }
-
-
 
                     var typeName = ""
                     if (pokemonDetailsObject.has("types")) {
                         val typesArray = pokemonDetailsObject.getJSONArray("types")
-
                         if (typesArray.length() > 0) {
                             val firstTypeObject = typesArray.getJSONObject(0)
-
                             if (firstTypeObject.has("type")) {
                                 val typeObject = firstTypeObject.getJSONObject("type")
-
                                 if (typeObject.has("name")) {
                                     typeName = typeObject.getString("name")
                                 }
@@ -125,21 +108,17 @@ class HomeActivity : ComponentActivity() {
                     }
 
                     var color = "white"
-
                     val speciesUrl = pokemonDetailsObject.getJSONObject("species").getString("url")
                     val speciesJson = URL(speciesUrl).readText()
                     val speciesObject = JSONObject(speciesJson)
                     try {
-
                         val colorUrl = URL(speciesObject.getJSONObject("color").getString("url"))
                         val colorJson = colorUrl.readText()
                         val colorObject = JSONObject(colorJson)
                         color = colorObject.getString("name")
-
                     } catch (e: Exception) {
                         Log.e("HomeActivity", "Error fetching Pokemon color: ${e.message}")
                     }
-
 
                     pokemonListToInsert.add(
                         Pokemon(
@@ -166,18 +145,11 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
-
     private fun loadPokemonList() {
-
         try {
             viewModel.getAll()
-        }
-        catch (e: Exception){
-            Log.e("HomeActivity", "Error loading pokemons: ${e.message}")
-
-        }
-
+        } catch (e: Exception) {
+            Log.e("HomeActivity", "Error loading pokemons")
+            }
     }
-
-
 }

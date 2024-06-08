@@ -1,7 +1,6 @@
 package com.example.myrecyclerviewapplication.controller
 
 import android.content.Intent
-import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -10,6 +9,7 @@ import androidx.activity.viewModels
 import com.example.myrecyclerviewapplication.compose.LoginRegisterScreen
 import com.example.myrecyclerviewapplication.model.user.User
 import com.example.myrecyclerviewapplication.model.user.UserRepository
+import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -27,7 +27,6 @@ class LoginRegisterActivity : ComponentActivity() {
             )
         }
     }
-
 
     private fun login(user: String, password: String) {
         viewModel.getUserByNameAndPassword(user, password)
@@ -54,5 +53,4 @@ class LoginRegisterActivity : ComponentActivity() {
         super.onResume()
         viewModel.refresh()
     }
-
 }
