@@ -29,7 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PokemonImage(image: Painter) {
+fun PokemonImage(imageUrl: String) {
     var showPokemon by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
@@ -43,8 +43,8 @@ fun PokemonImage(image: Painter) {
     }
 
     if (showPokemon) {
-        AnimatedPokemon(image)
+        AnimatedPokemon(imageUrl)
     } else {
-        BlackPokemon(image)
+        BlackPokemon(imageUrl)
     }
 }

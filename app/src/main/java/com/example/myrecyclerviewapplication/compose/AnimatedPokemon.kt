@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 
 @Composable
-fun AnimatedPokemon(image: Painter) {
+fun AnimatedPokemon(imageUrl: String) {
     val sizeAnim = rememberInfiniteTransition()
     val scale by sizeAnim.animateFloat(
         initialValue = 0.8f,
@@ -32,7 +34,7 @@ fun AnimatedPokemon(image: Painter) {
     )
 
     Image(
-        painter = image,
+        painter = rememberAsyncImagePainter(imageUrl),
         contentDescription = null,
         modifier = Modifier
             .size(200.dp)
