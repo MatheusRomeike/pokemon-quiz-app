@@ -10,5 +10,6 @@ data class User(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(index = true)
     val name: String,
-    val password: String
+    val password: String,
+    val current: Boolean
 )

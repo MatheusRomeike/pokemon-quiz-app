@@ -33,6 +33,11 @@ class UserViewModel @Inject constructor(private val userRepository: UserReposito
         userData.value = userRepository.user
     }
 
+    fun getCurrentUser(){
+        userRepository.getCurrentUser()
+        userData.value = userRepository.user
+    }
+
     fun refresh(){
         userRepository.user = userRepository.user
     }

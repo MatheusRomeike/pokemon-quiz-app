@@ -2,6 +2,7 @@ package com.example.myrecyclerviewapplication.controller
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,7 +43,7 @@ class LoginRegisterActivity : ComponentActivity() {
     private fun register(user: String, password: String) {
         viewModel.getUserByName(user)
         if (viewModel.userData.value == null) {
-            viewModel.insert(User(0, user, password))
+            viewModel.insert(User(0, user, password, current = false))
             Toast.makeText(this, "Registrado com sucesso.", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Erro ao registrar: Usuário já registrado.", Toast.LENGTH_SHORT).show()

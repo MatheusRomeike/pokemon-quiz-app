@@ -15,10 +15,17 @@ class UserRepository @Inject constructor(var dao: UserDao) {
     }
     fun getUserByNameAndPassword(name: String, password: String){
         user = dao.getUserByNameAndPassword(name, password)
+        if(user != null) {
+            dao.clearCurrentUser()
+            dao.setCurrentUser(user!!.id)
+        }
     }
 
     fun getUserByName(name: String){
         user = dao.getUserByName(name)
+    }
 
+    fun getCurrentUser() {
+        user = dao.getCurrentUser()
     }
 }
