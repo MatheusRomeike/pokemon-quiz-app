@@ -11,10 +11,15 @@ import javax.inject.Inject
 class UserScoreViewModel @Inject constructor(private val userScoreRepository: UserScoreRepository)
     : ViewModel()  {
     val userScoreData = MutableLiveData<UserScore>()
-
+    val userScoreListData = MutableLiveData<List<UserScore>>()
     fun insert(userPokemon: UserScore) {
         userScoreRepository.insert(userPokemon)
         userScoreData.value = userScoreRepository.userScore
+    }
+
+    fun getAll() {
+        userScoreRepository.getAll()
+        userScoreListData.value = userScoreRepository.userScoreList
     }
 
     fun getByUserId(userId: Int) {

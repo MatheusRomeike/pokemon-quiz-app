@@ -1,6 +1,5 @@
 package com.example.myrecyclerviewapplication.compose
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -10,25 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-data class LeaderboardEntry(val name: String, val score: Int)
-// Dados de exemplo para o leaderboard
-val leaderboardData = listOf(
-    LeaderboardEntry("João", 100),
-    LeaderboardEntry("Maria", 90),
-    LeaderboardEntry("Pedro", 80),
-    LeaderboardEntry("Ana", 70),
-    LeaderboardEntry("Carlos", 60),
-    LeaderboardEntry("Mariana", 50),
-    LeaderboardEntry("José", 40),
-    LeaderboardEntry("Laura", 30),
-    LeaderboardEntry("Rafael", 20),
-    LeaderboardEntry("Juliana", 10)
-)
+import com.example.myrecyclerviewapplication.model.user_score.UserScoreWithName
+
+
 @Composable
-fun LeaderboardScreen() {
+fun LeaderboardScreen(scoresList:  List<UserScoreWithName>) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -50,7 +37,7 @@ fun LeaderboardScreen() {
                     color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LeaderboardList(leaderboardData)
+                LeaderboardList(scoresList)
             }
         }
     )
@@ -58,7 +45,7 @@ fun LeaderboardScreen() {
 
 
 @Composable
-fun LeaderboardList(entries: List<LeaderboardEntry>) {
+fun LeaderboardList(entries: List<UserScoreWithName>) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -69,7 +56,7 @@ fun LeaderboardList(entries: List<LeaderboardEntry>) {
 }
 
 @Composable
-fun LeaderboardItem(entry: LeaderboardEntry, rank: Int) {
+fun LeaderboardItem(entry: UserScoreWithName, rank: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

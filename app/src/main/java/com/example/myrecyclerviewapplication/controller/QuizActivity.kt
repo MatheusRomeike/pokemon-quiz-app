@@ -7,7 +7,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.example.myrecyclerviewapplication.compose.PokemonQuizScreen
+import com.example.myrecyclerviewapplication.model.user.User
+import com.example.myrecyclerviewapplication.model.user_score.UserScore
 import com.example.myrecyclerviewapplication.viewmodel.PokemonViewModel
+import com.example.myrecyclerviewapplication.viewmodel.UserScoreViewModel
 import com.example.myrecyclerviewapplication.viewmodel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class QuizActivity : ComponentActivity() {
     private val pokeDatabase: PokemonViewModel by viewModels()
     private val user: UserViewModel by viewModels()
+    private val scoreView: UserScoreViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pokeDatabase.getAll()
@@ -32,8 +36,11 @@ class QuizActivity : ComponentActivity() {
     }
 
     private fun finishQuiz(score: Int) {
-            Toast.makeText(this, "Quiz finalizado, Score Total: $score", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, HomeActivity::class.java))
-            finish()
+        Toast.makeText(this, "Quiz finalizado, Score Total: $score", Toast.LENGTH_LONG).show()
+        startActivity(Intent(this, HomeActivity::class.java))
+        user.getCurrentUser()
+        val currentUser = user.userData.value
+        scoreView.insert(UserScore(userId = currentUser!!.id, score = score))
+        finish()
     }
 }

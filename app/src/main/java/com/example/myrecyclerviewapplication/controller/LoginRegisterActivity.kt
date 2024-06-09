@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginRegisterActivity : ComponentActivity() {
-    val viewModel: UserViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
     @Inject lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
