@@ -38,6 +38,10 @@ class HomeActivity : ComponentActivity() {
                 },
                 onScoreboardClicked = {
                     startActivity(Intent(this, LeaderBoardActivity::class.java))
+                },
+                onLogoutClicked = {
+                    startActivity(Intent(this, LoginRegisterActivity::class.java))
+                    finish()
                 }
             )
         }

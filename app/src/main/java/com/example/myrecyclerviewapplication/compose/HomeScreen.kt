@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.myrecyclerviewapplication.R
 
 @Composable
-fun HomeScreen(onQuizClicked: () -> Unit, onScoreboardClicked: () -> Unit) {
+fun HomeScreen(onQuizClicked: () -> Unit, onScoreboardClicked: () -> Unit, onLogoutClicked: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -29,6 +29,12 @@ fun HomeScreen(onQuizClicked: () -> Unit, onScoreboardClicked: () -> Unit) {
 
         Button(onClick = { onScoreboardClicked() }) {
             Text(text = "Scoreboard")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { onLogoutClicked() }) {
+            Text(text = "Logout")
         }
     }
 }
